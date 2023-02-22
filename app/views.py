@@ -18,8 +18,14 @@ def chat(request):
     config = configparser.ConfigParser()
     config.read('aws_credentials.txt')
 
-    os.environ['AWS_ACCESS_KEY_ID'] = config['default']['aws_access_key_id']
-    os.environ['AWS_SECRET_ACCESS_KEY'] = config['default']['aws_secret_access_key']
+    aws_access_key_id = os.environ.get('aws_access_key_id')
+    aws_secret_access_key = os.environ.get('aws_secret_access_key')
+
+    # aws_access_key_id = config['default']['aws_access_key_id']
+    # aws_secret_access_key = config['default']['aws_secret_access_key']
+
+    os.environ['AWS_ACCESS_KEY_ID'] = aws_access_key_id
+    os.environ['AWS_SECRET_ACCESS_KEY'] = aws_secret_access_key
 
     client = boto3.client('lexv2-runtime', region_name='ap-southeast-2')
 
@@ -35,6 +41,3 @@ def chat(request):
     context = {'message': message}
 
     return render(request, 'chat.html', context)
-
-# Why am I getting: An error occurred (InvalidSignatureException) when calling the RecognizeText operation: The request signature we calculated does not match the signature you provided. Check your AWS Secret Access Key and signing method. Consult the service documentation for details.
-# a:
