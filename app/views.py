@@ -18,8 +18,8 @@ def chat(request):
     config = configparser.ConfigParser()
     config.read('aws_credentials.txt')
 
-    aws_access_key_id = os.environ.get('aws_access_key_id')
-    aws_secret_access_key = os.environ.get('aws_secret_access_key')
+    aws_access_key_id = os.environ.get('access_key_id')
+    aws_secret_access_key = os.environ.get('secret_access_key')
 
     # aws_access_key_id = config['default']['aws_access_key_id']
     # aws_secret_access_key = config['default']['aws_secret_access_key']
