@@ -1,31 +1,29 @@
 from django.shortcuts import render
 import boto3
-import os
-import configparser
 
-
-# Create your views here.
-def index(request):
-    return render(request, 'index.html')
-
-
-def records(request):
-    return render(request, 'records.html')
+# os.environ['AWS_ACCESS_KEY_ID'] = os.environ.get('AWS_ACCESS_KEY_ID')
+# os.environ['AWS_SECRET_ACCESS_KEY'] = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
 
 def chat(request):
+    text = ''
 
-    config = configparser.ConfigParser()
-    config.read('aws_credentials.txt')
+    if request.method == 'POST':
+        text = request.POST.get('message', '')
 
-    aws_access_key_id = os.environ.get('access_key_id')
-    aws_secret_access_key = os.environ.get('secret_access_key')
+    message = getMessage(text)
+    context = {'message': message}
 
-    # aws_access_key_id = config['default']['aws_access_key_id']
-    # aws_secret_access_key = config['default']['aws_secret_access_key']
+    return render(request, 'chat.html', context)
 
-    os.environ['AWS_ACCESS_KEY_ID'] = aws_access_key_id
-    os.environ['AWS_SECRET_ACCESS_KEY'] = aws_secret_access_key
+
+
+
+
+def getMessage(input):
+
+    if input == '':
+        return 'Hi, how can I help you?'
 
     client = boto3.client('lexv2-runtime', region_name='ap-southeast-2')
 
@@ -34,10 +32,15 @@ def chat(request):
         botAliasId='TSTALIASID',
         localeId='en_US',
         sessionId="test_session",
-        text='Book a trip')
+        text=input)
 
-    message = response['messages'][0]['content']
+    try:
+        # check if response messages is not empty
+        if response['messages']:
+            # return the first message
+            return response['messages'][0]['content']
+        else:
+            return 'complete'
+    except:
+        return 'Thank you! Have a nice day!'
 
-    context = {'message': message}
-
-    return render(request, 'chat.html', context)
