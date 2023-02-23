@@ -5,15 +5,15 @@
             <img class="img" src="https://i.ibb.co/CzVWzd5/lex.jpg" alt="lex" border="0">
             <h1>Hi, my name is Alex!</h1>
         </flex>
-        <ul class="chatMessages">
+        <ul class="chatMessages" id="chatMessages">
             <!-- loop through each bot and user messages received from the context-->
             {% for message in conversations %}
-                <li id="response" name="response" rows="5" cols="50">{{message}}</li>
+                <li class="message" id="response" name="response" rows="5" cols="50">{{message}}</li>
             {% endfor %}
         </ul>
 
         <br>
-        <form action="{% url 'chat' %}" method="post">
+        <form action="{% url 'chat' %}" method="post" id="chatForm">
           {% csrf_token %}
           <label for="message">Enter your message:</label>
           <textarea id="message" name="message" rows="2" cols="50"></textarea>
@@ -42,6 +42,8 @@
       .chatMessages {
         list-style: none;
         padding: 0;
+        height: 150px;
+        overflow-y: scroll;
         }
 
       .chatMessages li:nth-child(odd) {
@@ -125,4 +127,23 @@
         }
 
 </style>
+<script>
+    // Select the element that contains the scrollbar
+const container = document.querySelector('.chatMessages');
+
+// Function to scroll to the bottom of the scrollbar
+function scrollToBottom() {
+  container.scrollTop = container.scrollHeight;
+}
+
+// Call the function whenever the container is scrolled
+container.addEventListener('scroll', function() {
+  // Check if the scrollbar is at the bottom
+  if (container.scrollHeight - container.scrollTop === container.clientHeight) {
+    // Scroll to the bottom if it is
+    scrollToBottom();
+  }
+});
+
+</script>
 {% endblock %}

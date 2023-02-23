@@ -30,7 +30,7 @@ def chat(request):
     # for each request, get the message from the user and add it to the response array
     if request.method == 'POST':
         text = request.POST.get('message', '')
-        responses.append(text)
+        responses.insert(0, text)
     else:
         text = ''
         responses.clear()
@@ -39,12 +39,14 @@ def chat(request):
     message = getMessage(text)
 
     # add the bot's response to the response array
-    responses.append(message)
+    responses.insert(0, message)
 
     # create a dictionary of the response array
     conversations = {'conversations': responses}
 
     context = conversations
+
+    print(context)
 
     return render(request, 'chat.html', context)
 
@@ -56,7 +58,7 @@ def getMessage(input):
     client = boto3.client('lexv2-runtime', region_name='ap-southeast-2')
 
     response = client.recognize_text(
-        botId='QSTRXSV9V7',
+        botId='KGYOZGD4HL',
         botAliasId='TSTALIASID',
         localeId='en_US',
         sessionId="test_session",
