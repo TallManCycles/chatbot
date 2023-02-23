@@ -3,9 +3,12 @@
     <div class="centered">
         <flex>
             <img class="img" src="https://i.ibb.co/CzVWzd5/lex.jpg" alt="lex" border="0">
-            <h1>Hi, my name is Lex!</h1>
+            <h1>Hi, my name is Alex!</h1>
         </flex>
-        <p id="response" name="response" rows="5" cols="50">{{message}}</p>
+        <!-- loop through each bot and user messages received from the context-->
+        {% for message in conversations %}
+            <p id="response" name="response" rows="5" cols="50">{{message}}</p>
+        {% endfor %}
         <br>
         <form action="{% url 'chat' %}" method="post">
           {% csrf_token %}
@@ -13,6 +16,9 @@
           <textarea id="message" name="message" rows="2" cols="50"></textarea>
           <br>
           <input type="submit" value="Submit">
+        <!--Create a button that reloads window with trailing backslash-->
+        <a href="/"><button type="button">Reset</button></a>
+
         </form>
     </div>
 <style>

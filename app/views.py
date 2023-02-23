@@ -1,46 +1,55 @@
+import email.message
+
 from django.shortcuts import render
 import boto3
 
-# os.environ['AWS_ACCESS_KEY_ID'] = os.environ.get('AWS_ACCESS_KEY_ID')
-# os.environ['AWS_SECRET_ACCESS_KEY'] = os.environ.get('AWS_SECRET_ACCESS_KEY')
+# create a list of bot responses to the user
+responses = []
 
 
 def chat(request):
-    text = ''
-
+    # for each request, get the message from the user and add it to the response array
     if request.method == 'POST':
         text = request.POST.get('message', '')
+        responses.append(text)
+    else:
+        text = ''
+        responses.clear()
 
+    # get the bot's response to the user's message
     message = getMessage(text)
-    context = {'message': message}
+
+    # add the bot's response to the response array
+    responses.append(message)
+
+    # create a dictionary of the response array
+    conversations = {'conversations': responses}
+
+    context = conversations
 
     return render(request, 'chat.html', context)
 
 
-
-
-
 def getMessage(input):
-
     if input == '':
         return 'Hi, how can I help you?'
 
     client = boto3.client('lexv2-runtime', region_name='ap-southeast-2')
 
     response = client.recognize_text(
-        botId='WHJUECIRUH',
+        botId='QSTRXSV9V7',
         botAliasId='TSTALIASID',
         localeId='en_US',
         sessionId="test_session",
         text=input)
 
-    try:
-        # check if response messages is not empty
-        if response['messages']:
+    print(response)
+
+    if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+        if 'messages' in response and response['messages']:
             # return the first message
             return response['messages'][0]['content']
         else:
-            return 'complete'
-    except:
-        return 'Thank you! Have a nice day!'
-
+            return 'Thanks! Have a great day!'
+    else:
+        return 'Sorry, there seems to be a connection issue. Please try again later.'
