@@ -30,6 +30,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_REDIRECT_URL = 'app/chat/'
+LOGIN_URL = '/'
+
 
 # Application definition
 

@@ -5,10 +5,13 @@
             <img class="img" src="https://i.ibb.co/CzVWzd5/lex.jpg" alt="lex" border="0">
             <h1>Hi, my name is Alex!</h1>
         </flex>
-        <!-- loop through each bot and user messages received from the context-->
-        {% for message in conversations %}
-            <p id="response" name="response" rows="5" cols="50">{{message}}</p>
-        {% endfor %}
+        <ul class="chatMessages">
+            <!-- loop through each bot and user messages received from the context-->
+            {% for message in conversations %}
+                <li id="response" name="response" rows="5" cols="50">{{message}}</li>
+            {% endfor %}
+        </ul>
+
         <br>
         <form action="{% url 'chat' %}" method="post">
           {% csrf_token %}
@@ -17,7 +20,7 @@
           <br>
           <input type="submit" value="Submit">
         <!--Create a button that reloads window with trailing backslash-->
-        <a href="/"><button type="button">Reset</button></a>
+        <a href="/"><button class="reset" type="button">Log Out</button></a>
 
         </form>
     </div>
@@ -36,6 +39,21 @@
         font-family: Arial, sans-serif;
       }
 
+      .chatMessages {
+        list-style: none;
+        padding: 0;
+        }
+
+      .chatMessages li:nth-child(odd) {
+        text-align: left;
+        background-color: #f5f5f5;
+        }
+
+      .chatMessages li:nth-child(even) {
+         text-align: right;
+         background-color: #ffffff;
+        }
+
       /* Chatbot header style */
       .centered h1 {
         font-size: 24px;
@@ -48,10 +66,7 @@
       #response {
         margin: 0;
         padding: 10px;
-        background-color: #f5f5f5;
         border-radius: 5px;
-        box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
-        text-align: left;
         font-size: 14px;
       }
 
@@ -75,6 +90,17 @@
 
       /* Chatbot submit button style */
       input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.2s ease-in-out;
+      }
+
+      .reset {
         background-color: #007bff;
         color: #fff;
         border: none;

@@ -1,12 +1,31 @@
-import email.message
-
 from django.shortcuts import render
 import boto3
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('chat/')
+        else:
+            error = 'Invalid login credentials'
+    else:
+        error = ''
+    return render(request, 'login.html', {'error': error})
+
 
 # create a list of bot responses to the user
 responses = []
 
 
+
+@login_required
 def chat(request):
     # for each request, get the message from the user and add it to the response array
     if request.method == 'POST':
