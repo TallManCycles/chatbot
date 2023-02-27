@@ -30,16 +30,16 @@ def chat(request):
     # for each request, get the message from the user and add it to the response array
     if request.method == 'POST':
         text = request.POST.get('message', '')
-        responses.insert(0, text)
+        responses.append(text)
     else:
         text = ''
         responses.clear()
 
     # get the bot's response to the user's message
-    message = getMessage(text)
+    message = getMessageV1(text)
 
     # add the bot's response to the response array
-    responses.insert(0, message)
+    responses.append(message)
 
     # create a dictionary of the response array
     conversations = {'conversations': responses}
@@ -51,26 +51,19 @@ def chat(request):
     return render(request, 'chat.html', context)
 
 
-def getMessage(input):
+def getMessageV1(input):
+
     if input == '':
-        return 'Hi, how can I help you?'
+        return 'Hi, how can I help you? type "Book Trip" to begin.'
 
-    client = boto3.client('lexv2-runtime', region_name='ap-southeast-2')
+    client = boto3.client('lex-runtime', region_name='ap-southeast-2')
 
-    response = client.recognize_text(
-        botId='KGYOZGD4HL',
-        botAliasId='TSTALIASID',
-        localeId='en_US',
-        sessionId="test_session",
-        text=input)
+    response = client.post_text(
+        botName='AlexVONE',
+        botAlias='VersionOne',
+        userId='663080568213',
+        inputText=input
+    )
 
-    print(response)
+    return response['message']
 
-    if response['ResponseMetadata']['HTTPStatusCode'] == 200:
-        if 'messages' in response and response['messages']:
-            # return the first message
-            return response['messages'][0]['content']
-        else:
-            return 'Thanks! Have a great day!'
-    else:
-        return 'Sorry, there seems to be a connection issue. Please try again later.'
