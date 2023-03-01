@@ -24,7 +24,6 @@ def login_view(request):
 responses = []
 
 
-
 @login_required
 def chat(request):
     # for each request, get the message from the user and add it to the response array
