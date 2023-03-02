@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9t%7yrmzab(%bj3r7wq3wj7*9da*p42+40!*wxz18q6l=-)kr#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -57,6 +57,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'ChatBotProject.urls'
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Find the templates directory
 

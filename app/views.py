@@ -3,6 +3,11 @@ import boto3
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+
+def handler404(request, exception):
+    return render(request, '404.html', status=404)
 
 
 def login_view(request):

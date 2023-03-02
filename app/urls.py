@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import chat, login_view
+from .views import chat, login_view, handler404
 from django.contrib.auth import views as auth_views
+
+handler404 = handler404
 
 urlpatterns = [
     path('chat/', chat, name='chat'),
