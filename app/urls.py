@@ -9,10 +9,3 @@ urlpatterns = [
     path('', login_view, name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
-
-
-# urlpatterns = [
-#     path('chat/', chat, name='chat'),
-#     path('', login_view, name='login'),
-#     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-# ]
